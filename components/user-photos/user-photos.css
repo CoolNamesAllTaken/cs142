@@ -1,0 +1,73 @@
+.user-photos {
+    background-color: white;
+}
+
+.user-photos a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.user-photos h1 {
+    padding: 10px;
+    margin: 10px 0px;
+    background-color: #8c1515;
+    color: white;
+}
+.user-photos h2 {
+    padding: 10px;
+    margin: 10px 0px;
+}
+.user-photos h3 {
+    padding: 0px 10px;
+    margin: 0px;
+    color: darkgray;
+}
+
+.user-photos p {
+    padding: 0px 20px;
+    margin: 0px;
+}
+
+/* Photo post styling */
+.user-photos .photo {
+    padding: 10px;
+    margin: 10px;
+    background-color: #D3D3D3;
+}
+
+.user-photos .photo h1 {
+    padding: 5px 10px;
+    margin: 0px;
+    font-size: 15px;
+}
+
+.user-photos .photo h2 {
+    padding: 2px 10px;
+    margin: 0px;
+    font-size: 10px;
+    
+    background-color: #ad5353;
+    color: white;
+}
+
+.user-photos img {
+    width: 100%;
+}
+
+.user-photos .comment {
+    margin: 10px;
+    border: 2px solid #8c1515;
+    
+    background-color: white;
+}
+
+.user-photos .comment p {
+    padding: 0px;
+    margin: 10px;
+    font-size: 10px;
+}
+
+.user-photos .comment .comment-box {
+    width: 100%;
+    box-sizing: border-box;
+}

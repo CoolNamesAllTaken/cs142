@@ -1,0 +1,18 @@
+<div class="user-photos">
+
+    <div ng-repeat="userPhoto in photos.userPhotos" class="photo">
+        <h2>{{userPhoto.date_time}}</h2>
+        <img ng-src="/images/{{userPhoto.file_name}}">
+        <div ng-repeat="comment in userPhoto.comments" class="comment">
+            <h1><a ng-href="#/users/{{comment.user._id}}">{{comment.user.first_name}} {{comment.user.last_name}}</a></h1>
+            <h2>{{comment.date_time}}</h2>
+            <p>{{comment.comment}}</p>
+        </div>
+        <div class="comment">
+            <form id="comment-form" ng-submit="photos.addComment(userPhoto)" method="post">
+                <input type="text" class="comment-box" ng-model="userPhoto.commentText"/><br />
+                <input type="submit" value="Comment"/>
+            </form>
+        </div>
+    </div>
+</div>

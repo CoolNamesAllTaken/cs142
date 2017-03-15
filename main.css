@@ -1,0 +1,85 @@
+/*
+CSS for the CS142 project #5 main page
+
+Since CSS uses a global name space for classes we should use class names starting with
+cs142-main- here.
+*/
+
+.photo-share .photo-share-toolbar {
+    padding: 5px;
+    margin: 0px;
+    background-color: #8c1515;
+    color: white;
+    font-size: 15px;
+}
+
+.photo-share .photo-share-toolbar .toolbar-title {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    padding: 15px 10px;
+    margin: 0px;
+    font-size: 15px;
+}
+
+.photo-share .photo-share-toolbar .toolbar-title h1 {
+    padding: 0px;
+    margin: 0px;
+}
+
+.photo-share .photo-share-toolbar a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.photo-share .user-toolbar {
+    background-color: #ad5353;
+    color: white;
+    margin: 0px;
+    padding: 5px;
+    font-size: 20px;
+    min-height: 0px;
+}
+
+.md-button {
+    background-color: #8c1515;
+    color: white;
+    display: flex;
+    justify-content: center;
+    /* Center content horizontally */
+    align-items: center;
+    /* Center content vertically */
+}
+
+md-checkbox .md-icon {
+    border: 2px solid lightgray;
+}
+
+md-checkbox.md-checked .md-icon {
+    background-color: #8c1515;
+    color: white;
+}
+
+md-switch .md-container .md-bar {
+    background-color: lightgray;
+}
+
+md-switch.md-checked .md-container .md-bar {
+    background-color: #8c1515;
+}
+
+md-switch .md-container .md-thumb {
+    background-color: white;
+}
+
+.fail-text {
+    margin: 10px;
+    padding: 0px;
+    color: red;
+}
+
+.success-text {
+    margin: 10px;
+    padding: 0px;
+    color: green;
+}

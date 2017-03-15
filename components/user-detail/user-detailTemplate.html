@@ -1,0 +1,13 @@
+<div class="user-detail">
+    <h1>{{main.user.first_name}} {{main.user.last_name}}</h1>
+    <h3>{{main.user.location}}</h3>
+    <a ng-href="#/photos/{{main.user._id}}"><span class="photo-link">See Photos</span></a>
+    <h2>Description</h2>
+    <p>
+        {{main.user.description}}
+    </p>
+    <h2>Occupation</h2>
+    <p>
+        {{main.user.occupation}}
+    </p>
+</div>

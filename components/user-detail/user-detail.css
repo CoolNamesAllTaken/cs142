@@ -1,0 +1,41 @@
+.user-detail {
+    background-color: white;
+}
+
+.user-detail .photo-link {
+    padding: 10px;
+    margin: 20px;
+    background-color: #8c1515;
+    font-weight: bold;
+    color: white;
+}
+
+.user-detail .photo-link:hover {
+    background-color: #AD5353;
+}
+
+.user-detail a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.user-detail h1 {
+    padding: 10px;
+    margin: 10px 0px;
+    background-color: #8c1515;
+    color: white;
+}
+.user-detail h2 {
+    padding: 10px;
+    margin: 10px 10px;
+}
+.user-detail h3 {
+    padding: 0px 10px;
+    margin: 10px 10px;
+    color: darkgray;
+}
+
+.user-detail p {
+    padding: 0px 20px;
+    margin: 0px;
+}

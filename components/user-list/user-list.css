@@ -1,0 +1,8 @@
+.user-list li {
+    padding: 5px;
+}
+.user-list li:hover {
+    color: white;
+    font-weight: bold;
+    background-color: #8c1515;
+}

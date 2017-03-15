@@ -1,0 +1,35 @@
+<div class="form-element">
+    <h1>Login</h1>
+    <div class="fail-text" ng-show="loginRegister.failText !== ''">{{loginRegister.failText}}</div>
+    <form id="login-form" ng-submit="loginRegister.login()" method="post">
+        <label>Login Name: <input type="text" ng-model="loginRegister.loginName"/></label><br />
+        <label>Password: <input type="password" ng-model="loginRegister.password"/></label><br />
+        <input type="submit" value="Login" />
+    </form>
+</div>
+
+<div class="form-element">
+    <h1>Register</h1>
+    <form id="register-form" ng-submit="loginRegister.register()" method="post">
+        <!--Required Items-->
+        <h3>Required Items</h3>
+        <label>Login Name: <input type="text" ng-model="loginRegister.regLoginName"/>*</label><br />
+        <label>Password: <input type="password" ng-model="loginRegister.regPassword"/>*</label><br />
+        <label>Confirm Password: <input type="password" ng-model="loginRegister.regPasswordConfirm"/></label>*<br />
+        <div class="fail-text" ng-show="loginRegister.regLoginName.length === 0">Login name can't be blank!</div>
+        <div class="fail-text" ng-show="loginRegister.regPassword.length === 0">Password can't be blank!</div>
+        <div class="fail-text" ng-show="loginRegister.regPassword !== loginRegister.regPasswordConfirm">Passwords don't match!</div>
+
+        <!--Optional Items-->
+        <h3>Optional Items</h3>
+        <label>First Name: <input type="text" ng-model="loginRegister.regFirstName"/></label><br />
+        <label>Last Name: <input type="text" ng-model="loginRegister.regLastName"/></label><br />
+        <label>Location: <textarea type="text" ng-model="loginRegister.regLocation" cols="40" rows="5"></textarea></label><br />
+        <label>Description: <textarea type="text" ng-model="loginRegister.regDescription" cols="40" rows="5"></textarea></label><br />
+        <label>Occupation: <textarea type="text" ng-model="loginRegister.regOccupation" cols="40" rows="5"></textarea></label><br />
+
+        <input ng-show="loginRegister.regPassword === loginRegister.regPasswordConfirm" type="submit" value="Register Me" />
+        <p class="fail-text">{{loginRegister.regFailText}}</p>
+        <p class="success-text">{{loginRegister.regSuccessText}}</p>
+    </form>
+</div>

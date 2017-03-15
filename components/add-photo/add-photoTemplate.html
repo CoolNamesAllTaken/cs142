@@ -1,0 +1,20 @@
+TESTING 123
+
+<div ng-if="main.loggedInUser" class="photo-upload">
+    <input id="photoFile" type="file" accept="image/*" onchange="angular.element(this).scope().addPhoto.inputFileNameChanged(this)">
+</div>
+<md-switch ng-model="addPhoto.private">Private</md-switch>
+<div ng-if="addPhoto.private">
+    <h1>Select users to share photo with:</h1>
+    <div class="shared-user-list">
+        <ul>
+            <li ng-repeat="user in addPhoto.userList" class="user-name">
+                <md-checkbox ng-model="addPhoto.userListShareStatus[$index]" aria-label="{{user.first_name}} {{user.last_name}}"></md-checkbox>
+                {{user.first_name}} {{user.last_name}}
+            </li>
+        </ul>
+    </div>
+</div>
+<md-button ng-click="addPhoto.uploadPhoto()">Add Photo</md-button>
+<div class="fail-text">{{addPhoto.failText}}</div>
+<div class="success-text" ng-show="addPhoto.successText.length > 0">{{addPhoto.successText}}</div>
