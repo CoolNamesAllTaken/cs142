@@ -3,6 +3,11 @@
     <div ng-repeat="userPhoto in photos.userPhotos" class="photo">
         <h2>{{userPhoto.date_time}}</h2>
         <img ng-src="/images/{{userPhoto.file_name}}">
+        <div class="likes-bar">
+            <h3>{{userPhoto.likes.length}}</h3>
+            <md-button ng-show="!(userPhoto.likes.indexOf(main.loggedInUser))">Like</md-button>
+            <md-button ng-show="userPhoto.likes.indexOf(main.loggedInUser)">Unlike</md-button>
+        </div>
         <div ng-repeat="comment in userPhoto.comments" class="comment">
             <h1><a ng-href="#/users/{{comment.user._id}}">{{comment.user.first_name}} {{comment.user.last_name}}</a></h1>
             <h2>{{comment.date_time}}</h2>
@@ -10,8 +15,8 @@
         </div>
         <div class="comment">
             <form id="comment-form" ng-submit="photos.addComment(userPhoto)" method="post">
-                <input type="text" class="comment-box" ng-model="userPhoto.commentText"/><br />
-                <input type="submit" value="Comment"/>
+                <input type="text" class="comment-box" ng-model="userPhoto.commentText" /><br />
+                <input type="submit" value="Comment" />
             </form>
         </div>
     </div>

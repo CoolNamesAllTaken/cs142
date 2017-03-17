@@ -25,17 +25,18 @@ var cs142models = require('./modelData/photoApp.js').cs142models;
 // We use the Mongoose to define the schema stored in MongoDB.
 var mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/cs142project6');
+mongoose.connect('mongodb://localhost/photoApp');
 
 // Load the Mongoose schema for Use and Photo
 var User = require('./schema/user.js');
 var Photo = require('./schema/photo.js');
+var Event = require('./schema/event.js');
 var SchemaInfo = require('./schema/schemaInfo.js');
 
 var versionString = '1.0';
 
 // We start by removing anything that existing in the collections.
-var removePromises = [User.remove({}), Photo.remove({}), SchemaInfo.remove({})];
+var removePromises = [User.remove({}), Photo.remove({}), Event.remove({}), SchemaInfo.remove({})];
 
 Promise.all(removePromises).then(function () {
 
@@ -44,6 +45,8 @@ Promise.all(removePromises).then(function () {
     // later in the script.
 
     var userModels = cs142models.userListModel();
+    var eventModels = cs142models.eventModel();
+
     var mapFakeId2RealId = {}; // Map from fake id to real Mongo _id
     var userPromises = userModels.map(function (user) {
         return User.create({
@@ -106,23 +109,47 @@ Promise.all(removePromises).then(function () {
                             console.log("Adding shared user with id " + user.objectID);
                         });
                     }
+                    if (photo.likes) {
+                        photo.likes.forEach(function (user) {
+                            photoObj.likes.push(user.objectID);
+                            console.log("Adding like user with id " + user.objectID);
+                        });
+                    }
                     photoObj.save();
                     console.log('Adding photo:', photo.file_name, ' of user ID ', photoObj.user_id);
                 }
             });
         });
         return Promise.all(photoPromises).then(function () {
-            // Create the SchemaInfo object
-            return SchemaInfo.create({
-                version: versionString
-            }, function (err, schemaInfo) {
-                if (err) {
-                    console.error('Error create schemaInfo', err);
-                } else {
-                    console.log('SchemaInfo object created with version ', versionString);
-                }
+                // Create the SchemaInfo object
+                return SchemaInfo.create({
+                    version: versionString
+                }, function (err, schemaInfo) {
+                    if (err) {
+                        console.error('Error create schemaInfo', err);
+                    } else {
+                        console.log('SchemaInfo object created with version ', versionString);
+                    }
+                });
+            })
+            .then(function () {
+                var eventPromises = eventModels.map(function (event) {
+                    return Event.create({
+                        event_type: event.event_type,
+                        description: event.description,
+                        file_name: event.file_name,
+                        date_time: event.date_time,
+                        user_id: event.user.objectID
+                    }, function (err, eventObj) {
+                        if (err) {
+                            console.error('Error creating eventModels', err);
+                        } else {
+                            console.log('Added event ' + eventObj.description + ' at time ' + eventObj.date_time);
+                        }
+                    });
+                });
+                return Promise.all(eventPromises);
             });
-        });
     });
 
     allPromises.then(function () {

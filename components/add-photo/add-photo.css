@@ -1,4 +1,8 @@
-.shared-user-list li {
+div.add-photo {
+    margin: 20px;
+}
+
+.add-photo .shared-user-list li {
     padding: 5px;
     list-style: none;
 }

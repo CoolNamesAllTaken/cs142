@@ -1,0 +1,12 @@
+<div class="activity-list">
+    <md-button id="refresh-button" ng-click="activities.fetch()">Refresh</md-button>
+    <ul>
+        <li ng-repeat=" activity in activities.activitiesList " class="activity ">
+            <div class="activity-box ">
+                <h2>{{activity.date_time}}</h2>
+                <p>{{activity.description}}</p>
+                <img ng-if="activity.file_name " ng-src="/images/{{activity.file_name}} ">
+            </div>
+        </li>
+    </ul>
+</div>

@@ -1,0 +1,54 @@
+.activity-list {
+    background-color: #D3D3D3;
+    padding: 10px;
+    margin: 10px;
+}
+
+.activity-list ul {
+    padding: 0px;
+    margin: 0px;
+}
+
+.activity-list li {
+    list-style: none;
+    background-color: #D3D3D3;
+    padding: 0px;
+    margin: 10px;
+}
+
+.activity-box {
+    width: 100%;
+    background-color: white;
+    border: 2px solid #8c1515;
+}
+
+.activity-list h2 {
+    padding: 2px 10px;
+    margin: 0px;
+    font-size: 10px;
+    background-color: #ad5353;
+    color: white;
+}
+
+.activity-list h3 {
+    padding: 2px 10px;
+    margin: 0px;
+    font-size: 10px;
+    background-color: #8c1515;
+    color: white;
+}
+
+.activity-list p {
+    padding: 10px;
+    margin: 10px;
+}
+
+.activity-list img {
+    width: 100px;
+    padding: 10px;
+    margin: 0px;
+}
+
+.activity-list #refresh-button {
+    margin: 10px auto;
+}

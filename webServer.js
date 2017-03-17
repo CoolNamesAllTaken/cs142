@@ -47,6 +47,7 @@ var fs = require("fs");
 var User = require('./schema/user.js');
 var Photo = require('./schema/photo.js');
 var SchemaInfo = require('./schema/schemaInfo.js');
+var Event = require('./schema/event.js');
 
 var express = require('express');
 var app = express();
@@ -62,7 +63,7 @@ var selectFields = function (selection_object, selected_keys) {
     return selection_object;
 };
 
-mongoose.connect('mongodb://localhost/cs142project6');
+mongoose.connect('mongodb://localhost/photoApp');
 
 // Middleware added for P7 (express-session, body-parser)
 app.use(session({
@@ -193,7 +194,7 @@ app.get('/user/:id', function (request, response) {
     }
 
     var id = request.params.id;
-    var user = User.findOne({
+    User.findOne({
             _id: id
         }, {
             _id: 1,
@@ -249,7 +250,8 @@ app.get('/photosOfUser/:id', function (request, response) {
             user_id: 1,
             comments: 1,
             file_name: 1,
-            date_time: 1
+            date_time: 1,
+            likes: 1
         },
         function (err, photos) {
             if (err) {
@@ -313,6 +315,25 @@ app.get('/photosOfUser/:id', function (request, response) {
     );
 });
 
+app.get('/activities', function (request, response) {
+    Event.find(function (err, activities) {
+        console.log(activities);
+    });
+    Event.find(function (err, activities) {
+        if (err) {
+            console.error("Error pulling activities list: " + err.data);
+            response.status(400).send("Error pulling activities list: " + err.data);
+        } else {
+            return activities;
+        }
+    }).sort({
+        date_time: -1
+    }).limit(20).then(function (activities) {
+        console.log("reached then " + activities);
+        response.status(200).send(activities);
+    });
+});
+
 // Log in POST request handler
 app.post('/admin/login', function (request, response) {
     // TODO: re-implement so but find way to clear session on refresh
@@ -335,6 +356,20 @@ app.post('/admin/login', function (request, response) {
         } else {
             request.session.user_id = user._id;
             request.session.login_name = user.login_name;
+
+            Event.create({
+                event_type: 'login',
+                description: user.first_name + " " + user.last_name + " logged in",
+                file_name: undefined,
+                date_time: Date.now(),
+                user_id: user._id
+            }, function (err, event) {
+                if (err) {
+                    console.error("Error creating login event");
+                } else {
+                    console.log("Login event created");
+                }
+            });
             response.status(200).send(user);
         }
     });
@@ -343,7 +378,8 @@ app.post('/admin/login', function (request, response) {
 
 // Log out POST request handler
 app.post('/admin/logout', function (request, response) {
-    if (!request.session.user_id) {
+    var userId = request.session.user_id;
+    if (!userId) {
         // User not logged in
         response.status(400).send("No user logged in");
     } else {
@@ -352,6 +388,25 @@ app.post('/admin/logout', function (request, response) {
             if (err) {
                 response.status(400).send("Logout failed");
             } else {
+
+                // Find user who logged out, create logout event
+                User.findOne({
+                    _id: userId
+                }, function (err, user) {
+                    Event.create({
+                        event_type: 'logout',
+                        description: user.first_name + " " + user.last_name + " logged out",
+                        file_name: undefined,
+                        date_time: Date.now(),
+                        user_id: userId
+                    }, function (err, event) {
+                        if (err) {
+                            console.error("Error creating logout event");
+                        } else {
+                            console.log("Logout event created");
+                        }
+                    });
+                });
                 response.status(200).end();
             }
         });
@@ -396,6 +451,35 @@ app.post('/commentsOfPhoto/:photo_id', function (request, response) {
                 console.log(photo.comments);
                 photo.comments.push(comment);
                 photo.save();
+
+                // Find user who made comment, create new comment event
+                User.findOne({
+                    _id: request.session.user_id
+                }, function (err, user) {
+                    // Find photo author
+                    User.findOne({
+                        _id: photo.user_id
+                    }, function (err, photoAuthor) {
+                        if (err) {
+                            console.error("Error finding photo author when creating new comment event");
+                        } else {
+                            // Create new comment event
+                            Event.create({
+                                event_type: 'new-comment',
+                                description: user.first_name + " " + user.last_name + " commented on " + photoAuthor.first_name + " " + photoAuthor.last_name + "'s photo: \x22" + commentText + "\x22",
+                                file_name: photo.file_name,
+                                date_time: Date.now(),
+                                user_id: request.session.user_id
+                            }, function (err, event) {
+                                if (err) {
+                                    console.error("Error creating new comment event");
+                                }
+                            });
+                        }
+
+                    });
+
+                });
                 response.status(200).end();
             }
         });
@@ -443,10 +527,24 @@ app.post('/photos/new', function (request, response) {
                         response.status(400).send("Error creating new photo");
                         return;
                     } else {
-                        //                        request.body.shared_users.forEach(function (user_id) {
-                        //                            photo.shared_users.push(user_id);
-                        //                        });
-                        //                        photo.save();
+                        // Find user who uploaded photo, create photo upload event
+                        User.findOne({
+                            _id: request.session.user_id
+                        }, function (err, user) {
+                            Event.create({
+                                event_type: 'photo-upload',
+                                description: user.first_name + " " + user.last_name + " uploaded a photo.",
+                                file_name: filename,
+                                date_time: Date.now(),
+                                user_id: request.session.user_id
+                            }, function (err, event) {
+                                if (err) {
+                                    console.error("Error creating photo upload event");
+                                } else {
+                                    console.log("Photo upload event created");
+                                }
+                            });
+                        });
 
                         response.status(200).end();
                     }
@@ -493,6 +591,19 @@ app.post('/user', function (request, response) {
                 if (err) {
                     response.status(400).send("Error creating new user");
                 } else {
+                    Event.create({
+                        event_type: 'user-registration',
+                        description: request.body.first_name + " " + request.body.last_name + " registered an account.",
+                        file_name: undefined,
+                        date_time: Date.now(),
+                        user_id: newUser._id
+                    }, function (err, event) {
+                        if (err) {
+                            console.error("Error creating user registration event");
+                        } else {
+                            console.log("User registration event created");
+                        }
+                    });
                     response.status(200).end();
                 }
             });
